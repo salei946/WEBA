@@ -11,7 +11,17 @@ class Controller {
         $this->model = new Model(withErrors: true);
     }
 
-    // TODO
+    //Générer une réponse HTTP 200 avec la liste de tous les cours
+    public function getCourses(): Response{
+        $courses = $this->model->getCourses();
+
+        return new Response(
+            httpCode: 200,
+            responseString: json_encode($courses)
+        );
+    }
+
+
 }
 
 ?>

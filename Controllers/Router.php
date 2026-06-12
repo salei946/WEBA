@@ -12,7 +12,15 @@ class Router {
 
         $controller = new Controller();
 
-        // TODO
+        switch ($action)
+        {
+            case "courses":
+                if ($method === "GET" && !isset($_GET["id"]) && !isset($_GET["withExercises"])) {
+                    return $controller->getCourses();
+                }
+                break;
+
+        }
 
         return null;
     }
