@@ -18,7 +18,11 @@ class Router {
                 if ($method === "GET" && !isset($_GET["id"]) && !isset($_GET["withExercises"])) {
                     return $controller->getCourses();
                 }
+                elseif ($method === "GET" && !isset($_GET["id"]) && isset($_GET["withExercises"]) && $_GET["withExercises"] === "true") {
+                    return $controller->getCoursesWithExercises();
+                }   
                 break;
+
 
         }
 

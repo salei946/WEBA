@@ -21,7 +21,15 @@ class Controller {
         );
     }
 
+    public function getCoursesWithExercises(): Response {
+        $courses = $this->model->getCoursesWithExercises();
 
-}
+        return new Response(
+            httpCode: 200,
+            responseString: json_encode($courses)
+        );
+    }
+
+}    
 
 ?>

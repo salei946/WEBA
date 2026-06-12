@@ -12,24 +12,20 @@ class Model {
         }
     }
 
-    // TODO
+    // fonction qui récupère tout les cours.
     public function getCourses(): array{
-        $sql = "
-            SELECT
-                id,
-                name,
-                deadline
-            FROM course
-            ORDER BY id
-        ";
-
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db->prepare(" SELECT id, name, deadline FROM course ORDER BY id ");
         $statement->execute();
-
         return $statement->fetchAll(PDO::FETCH_ASSOC);
         }
 
+    //fonction qui récupère tout les cours avec leurs exercices liés.
+    public function getCoursesWithExercises(): array{
+            $statement = $this->db->prepare("SELECT c.id AS course_id,c.name AS course_name,c.deadline,e.id AS exercise_id,e.description AS exercise_description FROM course c LEFT JOIN exercise e ON c.id = e.courseId ORDER BY c.id, e.id;");
+        $statement->execute();
 
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
 
