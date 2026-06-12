@@ -12,20 +12,39 @@ class Router {
 
         $controller = new Controller();
 
-        switch ($action)
-        {
+        switch ($action){
             case "courses":
-                if ($method === "GET" && !isset($_GET["id"]) && !isset($_GET["withExercises"])) {
-                    return $controller->getCourses();
+                switch ($method) {
+                    case "GET":
+                        if (!isset($_GET["id"]) && !isset($_GET["withExercises"])) {
+                        return $controller->getCourses();
+                        }   
+                        elseif (!isset($_GET["id"]) && isset($_GET["withExercises"]) && $_GET["withExercises"] === "true") {
+                            return $controller->getCoursesWithExercises();
+                        }   
+                        break;
+
+                    case "POST":
+                        break;
+
+                    case "DELETE":
+                        break;
                 }
-                elseif ($method === "GET" && !isset($_GET["id"]) && isset($_GET["withExercises"]) && $_GET["withExercises"] === "true") {
-                    return $controller->getCoursesWithExercises();
-                }   
                 break;
 
+            // appelle de la fonction des cours en retard dans le controller
+            case "latecourses":
+                switch ($method) {
+                    case "GET":
+                        if($action === 'latecourses') {
+                            return $controller->getLateCourses();
+                        }
+                        break;
+                }
+                break;
 
+        
         }
-
         return null;
     }
 }

@@ -27,6 +27,24 @@ class Model {
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+
+
+
+    // 8. Obtenir les cours en retard (deadline passée) avec le nombre d'exercices restants (finished = 0)
+    public function getlateCoursesAndExercices(): array {
+        // Requête effectuant le calcule de l'heure ainsi que l'affichage des cours avec un délai dépassé.
+        $stmt = $this->db->query("SELECT c.id, c.name, c.deadline,  COUNT(CASE WHEN e.finished = 0 THEN 1 END) AS remainingExercises FROM course c LEFT JOIN exercise e ON c.id = e.courseId WHERE c.deadline IS NOT NULL AND c.deadline < NOW() GROUP BY c.id, c.name, c.deadline HAVING COUNT(CASE WHEN e.finished = 0 THEN 1 END) > 0;");
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+        // Forcer le typage de l'agrégation en entier
+        foreach ($results as &$row) {
+            $row['remainingExercises'] = (int)$row['remainingExercises'];
+        }
+        return $results;
+    }
+
 }
 
 ?>

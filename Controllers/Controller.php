@@ -30,6 +30,18 @@ class Controller {
         );
     }
 
+
+
+
+
+
+
+    // Génére une réponse HTTP 200 avec la liste des cours en retard.
+    public function getLateCourses(): Response {
+        $lateCourses = $this->model->getlateCoursesAndExercices();
+        return new Response(200, json_encode($lateCourses));
+    }
+
 }    
 
 ?>
