@@ -6,6 +6,8 @@ class SecurityHelper {
 
     public static function isAPIKeyValid(): bool {
         
+        return isset($_GET["api_key"]) && $_GET["api_key"] === self::$apiKey;
+        
         
     }
 
