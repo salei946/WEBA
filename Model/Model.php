@@ -82,6 +82,7 @@ class Model {
 
     //6. Supprimer un cours selon son id passé dans l'URL
     public function deleteCourse(int $id): bool {
+
         $statement = $this->db->prepare("DELETE FROM course WHERE id = :id");
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
         return $statement->execute();
@@ -91,7 +92,27 @@ class Model {
 
 
 
-    // 8. Obtenir les cours en retard (deadline passée) avec le nombre d'exercices restants (finished = 0)
+    //8. Supprimer un exercice selon son id passé dans l'URL
+    // fonction qui récupère le cours avec son id
+    public function getExerciseByID(int $id): bool{
+        // Requête qui récupère l'exercice 1 pour voir s'il existe.
+        $stmt = $this->db->prepare("SELECT * FROM exercise WHERE id = :id");
+        // execute la commande
+        return $stmt->execute(['id' => $id]);
+    }
+
+    public function deleteExercices(int $id): bool {
+        // Requête effectuant la suppression du cours numéro 1.
+        $stmt = $this->db->prepare("DELETE FROM exercise WHERE id = :id");
+        // execute la commande
+
+        return  $stmt->execute(['id' => $id]);
+    }
+
+
+
+
+    // 9. Obtenir les cours en retard (deadline passée) avec le nombre d'exercices restants (finished = 0)
     public function getlateCoursesAndExercices(): array {
         // Requête effectuant le calcule de l'heure ainsi que l'affichage des cours avec un délai dépassé.
         $stmt = $this->db->query("SELECT c.id, c.name, c.deadline,  COUNT(CASE WHEN e.finished = 0 THEN 1 END) AS remainingExercises FROM course c LEFT JOIN exercise e ON c.id = e.courseId WHERE c.deadline IS NOT NULL AND c.deadline < NOW() GROUP BY c.id, c.name, c.deadline HAVING COUNT(CASE WHEN e.finished = 0 THEN 1 END) > 0;");

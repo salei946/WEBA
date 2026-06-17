@@ -60,11 +60,37 @@ class Controller {
 
     //Supprimer un cours selon son id passé dans l'URL
     public function deleteCourse(int $id): Response {
-        $deleted = $this->model->deleteCourse($id);
-        if ($deleted) {
-            return new Response(204);
-        } else {
+        $course = $this->model->getCourseById($id);
+        if (!$course) {
             return new Response(404);
+        }else {
+            $deleted = $this->model->deleteCourse($id);
+            if ($deleted) {
+                return new Response(204);
+            } else {
+                return new Response(404);
+            }
+        }
+    
+    }
+
+
+
+//Fonction pour supprimer un exercice selon son id passé dans l'URL
+    public function deleteExercices(int $id): Response {
+        // va récupérer des informations si l'exercise existe bien
+        $exercise = $this->model->getExerciseByID($id);
+        // contrôle si $exercise existe bel et bien.
+        if(!$exercise) {
+            return new Response(404);
+        } else {
+            $response = $this->model->deleteExercices($id);
+            if ($response) {
+                return new Response(204);
+            }
+            else {
+                return new Response(404);
+            }
         }
     }
 

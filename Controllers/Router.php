@@ -52,7 +52,21 @@ class Router {
                 }
                 break;
 
-        
+            case "exercises":
+                switch ($method) {
+                    case "GET":
+                        break;
+                        //action d'ajout
+                    case "POST":
+                        break;
+                        //action de suppression
+                    case "DELETE":
+                        if (isset($_GET['id']) && !empty($_GET['id'])) {
+                            return $controller->deleteExercices((int)$_GET["id"]);
+                        }
+                        break;
+                }
+                break;
         }
         return null;
     }
