@@ -80,6 +80,13 @@ class Model {
         return (int)$this->db->lastInsertId();
     }
 
+    //6. Supprimer un cours selon son id passé dans l'URL
+    public function deleteCourse(int $id): bool {
+        $statement = $this->db->prepare("DELETE FROM course WHERE id = :id");
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        return $statement->execute();
+    } 
+
 
 
 

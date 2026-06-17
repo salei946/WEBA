@@ -33,6 +33,10 @@ class Router {
                         break;
 
                     case "DELETE":
+                        if (isset($_GET["id"])) {
+                            $id = (int)$_GET["id"];
+                            return $controller->deleteCourse($id);
+                        }
                         break;
                 }
                 break;

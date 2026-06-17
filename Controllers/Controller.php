@@ -57,6 +57,17 @@ class Controller {
 
         return new Response(201,json_encode(["id" => $id]));
     }
+
+    //Supprimer un cours selon son id passé dans l'URL
+    public function deleteCourse(int $id): Response {
+        $deleted = $this->model->deleteCourse($id);
+        if ($deleted) {
+            return new Response(204);
+        } else {
+            return new Response(404);
+        }
+    }
+
         
 
 
