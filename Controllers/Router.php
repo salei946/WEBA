@@ -21,10 +21,17 @@ class Router {
                         }   
                         elseif (!isset($_GET["id"]) && isset($_GET["withExercises"]) && $_GET["withExercises"] === "true") {
                             return $controller->getCoursesWithExercises();
-                        }   
+                        }
+                        elseif (isset($_GET["id"])) {
+                            $id = (int)$_GET["id"];
+                            return $controller->getCourseById((int)$id);
+                        }
                         break;
 
                     case "POST":
+                        return $controller->createCourse();
+                        
+
                         break;
 
                     case "DELETE":

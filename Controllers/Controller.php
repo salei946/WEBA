@@ -30,6 +30,36 @@ class Controller {
         );
     }
 
+    public function getCourseById(int $id): Response {
+        $course = $this->model->getCourseById($id);
+
+        if ($course) {
+            return new Response(
+                httpCode: 200,
+                responseString: json_encode($course)
+            );
+        } else {
+            return new Response(httpCode: 404);
+        }
+    }
+
+    //Créer un cours à partir de son nom et sa date d'échéance (deadline) passés dans le corps de la requête (optionnel)
+    public function createCourse(): Response {
+        
+        if (!isset($_POST["name"]) || empty($_POST["name"])) {
+            return new Response(400);
+        }
+
+        $name = $_POST["name"];
+        $deadline = $_POST["deadline"] ?? null;
+
+        $id = $this->model->addCourse($name,$deadline);
+
+        return new Response(201,json_encode(["id" => $id]));
+    }
+        
+
+
 
 
 

@@ -7,7 +7,7 @@ class SecurityHelper {
     public static function isAPIKeyValid(): bool {
 
         $headers = getallheaders();
-
+        
         if (!isset($headers['Authorization'])) {
             return false;
         }
