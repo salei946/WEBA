@@ -29,9 +29,7 @@ class Router {
                         break;
 
                     case "POST":
-                        return $controller->createCourse();
-                        
-
+                        return $controller->addCourse($_POST["name"], $_POST["deadline"] ?? null);
                         break;
 
                     case "DELETE":

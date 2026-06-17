@@ -44,7 +44,7 @@ class Controller {
     }
 
     //Créer un cours à partir de son nom et sa date d'échéance (deadline) passés dans le corps de la requête (optionnel)
-    public function createCourse(): Response {
+    public function addCourse(string $name, ?string $deadline): Response {
         
         if (!isset($_POST["name"]) || empty($_POST["name"])) {
             return new Response(400);
