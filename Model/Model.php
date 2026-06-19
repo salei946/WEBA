@@ -51,7 +51,7 @@ class Model {
                 }
             }
         }
-        //
+        // 
         $completionPercentage = ($totalExercises > 0) ? ($finishedExercises / $totalExercises) * 100 : 0;
 
         // Ajout du pourcentage de complétion à la réponse
@@ -77,6 +77,7 @@ class Model {
             "name" => $name,
             "deadline" => $deadline
         ]);
+
         return (int)$this->db->lastInsertId();
     }
 
@@ -88,25 +89,36 @@ class Model {
         return $statement->execute();
     } 
 
+    //7. Créer un nouveau cours à partir des informations passées dans le corps de la requête (nom et description)
+    public function addExercise(int $id, string $name, ?string $description): int {
+        $statement = $this->db->prepare("INSERT INTO exercise (courseId, name, description) VALUES (:courseId, :name, :description)");
+        $statement->execute([
+            "courseId"=> $id,
+            "name" => $name,
+            "description" => $description
+        ]);
 
-
-
+        return (int)$this->db->lastInsertId();
+    }
 
     //8. Supprimer un exercice selon son id passé dans l'URL
     // fonction qui récupère le cours avec son id
     public function getExerciseByID(int $id): bool{
         // Requête qui récupère l'exercice 1 pour voir s'il existe.
-        $stmt = $this->db->prepare("SELECT * FROM exercise WHERE id = :id");
-        // execute la commande
-        return $stmt->execute(['id' => $id]);
+        $statement = $this->db->prepare("SELECT * FROM exercise WHERE id = :id");
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        $statement->execute();
+        // renvoie nul s'il n'y a rien
+        $courseData = $statement->fetchAll(PDO::FETCH_ASSOC);
+        // contrôle si il y a bel et bien une donnée présente
+        if (empty($courseData)) { return false; }
+        else { return true; }
     }
-
-    public function deleteExercices(int $id): bool {
-        // Requête effectuant la suppression du cours numéro 1.
-        $stmt = $this->db->prepare("DELETE FROM exercise WHERE id = :id");
-        // execute la commande
-
-        return  $stmt->execute(['id' => $id]);
+    // Requête effectuant la suppression du cours numéro 1. 
+    public function deleteExercices(int $id): bool {  
+        $statement = $this->db->prepare("DELETE FROM exercise WHERE id = :id");
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        return $statement->execute();
     }
 
 

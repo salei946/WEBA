@@ -58,10 +58,11 @@ class Router {
                         break;
                         //action d'ajout
                     case "POST":
+                        return $controller->addExercise($_POST["courseId"], $_POST["name"], $_POST["description"] ?? null);
                         break;
                         //action de suppression
                     case "DELETE":
-                        if (isset($_GET['id']) && !empty($_GET['id'])) {
+                        if (isset($_GET['id'])) {
                             return $controller->deleteExercices((int)$_GET["id"]);
                         }
                         break;

@@ -11,7 +11,7 @@ class Controller {
         $this->model = new Model(withErrors: true);
     }
 
-    //Générer une réponse HTTP 200 avec la liste de tous les cours
+    // 2. Générer une réponse HTTP 200 avec la liste de tous les cours
     public function getCourses(): Response{
         $courses = $this->model->getCourses();
 
@@ -20,7 +20,7 @@ class Controller {
             responseString: json_encode($courses)
         );
     }
-
+    // 3. Générer une réponse HTTP 200 avec les cours et leurs exercices liés.
     public function getCoursesWithExercises(): Response {
         $courses = $this->model->getCoursesWithExercises();
 
@@ -29,7 +29,7 @@ class Controller {
             responseString: json_encode($courses)
         );
     }
-
+    // 4. Générer une réponse HTTP 200 avec les détails d'un cours selon son id et donne le % des exercices terminés
     public function getCourseById(int $id): Response {
         $course = $this->model->getCourseById($id);
 
@@ -43,7 +43,7 @@ class Controller {
         }
     }
 
-    //Créer un cours à partir de son nom et sa date d'échéance (deadline) passés dans le corps de la requête (optionnel)
+    // 5. Générer une réponse HTTP 201 avec l'id du cours ajouté
     public function addCourse(string $name, ?string $deadline): Response {
         
         if (!isset($_POST["name"]) || empty($_POST["name"])) {
@@ -58,7 +58,7 @@ class Controller {
         return new Response(201,json_encode(["id" => $id]));
     }
 
-    //Supprimer un cours selon son id passé dans l'URL
+    // 6. Générer une réponse HTTP 204 après suppression
     public function deleteCourse(int $id): Response {
         $course = $this->model->getCourseById($id);
         if (!$course) {
@@ -71,12 +71,21 @@ class Controller {
                 return new Response(404);
             }
         }
-    
     }
 
+    // 7. Générer une réponse HTTP 201 avec l'id de l'exercise ajouté
+    public function addExercise(int $id, string $name, ?string $description): Response {
+        
+        if (!isset($name) || empty($name)) {
+            return new Response(400);
+        }
 
+        $id = $this->model->addExercise($id, $name,$description);
 
-//Fonction pour supprimer un exercice selon son id passé dans l'URL
+        return new Response(201,json_encode(["id" => $id]));
+    }
+
+    // 8. Générer une réponse HTTP 204 après suppression
     public function deleteExercices(int $id): Response {
         // va récupérer des informations si l'exercise existe bien
         $exercise = $this->model->getExerciseByID($id);
@@ -84,26 +93,16 @@ class Controller {
         if(!$exercise) {
             return new Response(404);
         } else {
-            $response = $this->model->deleteExercices($id);
-            if ($response) {
+            $deleted = $this->model->deleteExercices($id);
+            if ($deleted) {
                 return new Response(204);
-            }
-            else {
+            } else {
                 return new Response(404);
             }
         }
     }
 
-        
-
-
-
-
-
-
-
-
-    // Génére une réponse HTTP 200 avec la liste des cours en retard.
+    // 9. Génére une réponse HTTP 200 avec la liste des cours en retard.
     public function getLateCourses(): Response {
         $lateCourses = $this->model->getlateCoursesAndExercices();
         return new Response(200, json_encode($lateCourses));
