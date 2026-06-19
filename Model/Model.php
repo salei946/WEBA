@@ -21,7 +21,7 @@ class Model {
 
     // 3. fonction qui récupère tout les cours avec leurs exercices liés.
     public function getCoursesWithExercises(): array{
-        $statement = $this->db->prepare("SELECT c.id AS course_id,c.name AS course_name,c.deadline,e.id AS exercise_id,e.description AS exercise_description FROM course c LEFT JOIN exercise e ON c.id = e.courseId ORDER BY c.id, e.id;");
+        $statement = $this->db->prepare("SELECT c.id AS course_id,c.name AS course_name,c.deadline,e.id AS exercise_id,e.description AS exercise_description, e.finished AS exercise_completion FROM course c LEFT JOIN exercise e ON c.id = e.courseId ORDER BY c.id, e.id;");
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -86,6 +86,7 @@ class Model {
 
         $statement = $this->db->prepare("DELETE FROM course WHERE id = :id");
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        
         return $statement->execute();
     } 
 

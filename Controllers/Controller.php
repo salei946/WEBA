@@ -14,12 +14,16 @@ class Controller {
     // 2. Générer une réponse HTTP 200 avec la liste de tous les cours
     public function getCourses(): Response{
         $courses = $this->model->getCourses();
-
-        return new Response(
+        if(empty($courses)) {
+            return new Response(httpCode: 404);
+        }else{
+            return new Response(
             httpCode: 200,
             responseString: json_encode($courses)
-        );
+            );
+        }
     }
+    
     // 3. Générer une réponse HTTP 200 avec les cours et leurs exercices liés.
     public function getCoursesWithExercises(): Response {
         $courses = $this->model->getCoursesWithExercises();
@@ -64,12 +68,8 @@ class Controller {
         if (!$course) {
             return new Response(404);
         }else {
-            $deleted = $this->model->deleteCourse($id);
-            if ($deleted) {
-                return new Response(204);
-            } else {
-                return new Response(404);
-            }
+            $this->model->deleteCourse($id);
+            return new Response(204);
         }
     }
 
@@ -79,9 +79,7 @@ class Controller {
         if (!isset($name) || empty($name)) {
             return new Response(400);
         }
-
         $id = $this->model->addExercise($id, $name,$description);
-
         return new Response(201,json_encode(["id" => $id]));
     }
 
@@ -93,12 +91,8 @@ class Controller {
         if(!$exercise) {
             return new Response(404);
         } else {
-            $deleted = $this->model->deleteExercices($id);
-            if ($deleted) {
-                return new Response(204);
-            } else {
-                return new Response(404);
-            }
+            $this->model->deleteExercices($id);
+            return new Response(204);
         }
     }
 
